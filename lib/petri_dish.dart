@@ -18,7 +18,7 @@ class _PetriDishState<PetriDish> extends State {
   static const int tickTime = 30;
   static const double recreationProbability = 0.005;
   static const double deathProbability = 0.001;
-  static const double maxBacteriaAmount = 10000;
+  static const double maxBacteriaAmount = 1024;
 
   int currentTick = 0;
   List<Bacteria> bacteriaList = <Bacteria>[];

@@ -11,12 +11,14 @@ class BacterialGrowthApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       color: Colors.white,
       title: 'Flutter Clutter Bacterial Growth',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: const Scaffold(
+        backgroundColor: Colors.white,
         body: PetriDish(),
       ),
     );

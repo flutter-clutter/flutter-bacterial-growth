@@ -8,7 +8,6 @@ class BacteriaCollectionPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    // TODO: Rotate
     final Paint paint = Paint();
     for (final Bacteria bacteria in bacteriaList) {
       final Rect rect = Rect.fromLTWH(
@@ -22,10 +21,33 @@ class BacteriaCollectionPainter extends CustomPainter {
         Radius.circular(bacteria.width / 2),
       );
       paint.strokeWidth = 2;
-      paint.color = const Color.fromRGBO(255, 150, 150, 0.6);
+      //paint.style = PaintingStyle.stroke;
+      paint.color = Colors.black38;
 
-      canvas.drawRRect(roundedRectangle, paint);
+      _drawRotated(
+        canvas,
+        Offset(
+          bacteria.x + (bacteria.width / 2),
+          size.height - (bacteria.y - (bacteria.height / 2)),
+        ),
+        bacteria.rotation,
+        () => canvas.drawRRect(roundedRectangle, paint),
+      );
     }
+  }
+
+  void _drawRotated(
+    Canvas canvas,
+    Offset center,
+    double angle,
+    VoidCallback drawFunction,
+  ) {
+    canvas.save();
+    canvas.translate(center.dx, center.dy);
+    canvas.rotate(angle);
+    canvas.translate(-center.dx, -center.dy);
+    drawFunction();
+    canvas.restore();
   }
 
   @override
