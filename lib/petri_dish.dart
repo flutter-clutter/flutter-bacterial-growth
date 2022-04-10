@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bacterial_growth/bacteria_collection.dart';
+import 'package:bacterial_growth/bacteria_history_graph.dart';
 import 'package:bacterial_growth/model/bacteria.dart';
 import 'package:flutter/material.dart';
 
@@ -17,34 +18,57 @@ class PetriDish extends StatefulWidget {
 
 class _PetriDishState<PetriDish> extends State {
   static const int tickTime = 30;
-  static const double recreationProbability = 0.995;
-  static const double maxBacteriaAmount = 256;
+  static const double recreationProbability = 0.005;
+  static const double deathProbability = 0.001;
+  static const double maxBacteriaAmount = 1024;
 
+  int currentTick = 0;
   List<Bacteria> bacteriaList = <Bacteria>[];
-  late Size size;
+  List<BacteriaGrowthHistoryElement> bacteriaGrowthHistory =
+      <BacteriaGrowthHistoryElement>[];
+  Size size = Size.zero;
 
   @override
   void initState() {
-    Future.delayed(const Duration(milliseconds: 100), _tick);
+    _nextTick();
     super.initState();
   }
 
   @override
-  void didChangeDependencies() {
-    size = MediaQuery.of(context).size;
-    super.didChangeDependencies();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return BacteriaCollection(bacteriaList: bacteriaList);
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        size = Size(constraints.maxWidth, constraints.maxHeight);
+        return Stack(
+          children: <Widget>[
+            BacteriaCollection(bacteriaList: bacteriaList),
+            Positioned(
+              bottom: 0,
+              child: SizedBox(
+                width: constraints.maxWidth,
+                height: 200,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 32,
+                    left: 16,
+                    right: 16,
+                  ),
+                  child: BacteriaHistoryGraph(
+                    currentBacteriaAmount: bacteriaList.length,
+                    currentTick: currentTick,
+                    historyElements: bacteriaGrowthHistory,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _tick() {
-    if (size == null) {
-      _nextTick();
-      return;
-    }
+    currentTick += 1;
 
     if (bacteriaList.isEmpty) {
       _createInitialBacteria();
@@ -52,7 +76,7 @@ class _PetriDishState<PetriDish> extends State {
       return;
     }
 
-    _createNewRandomBacteria();
+    _iterateAllBacteria();
 
     _nextTick();
   }
@@ -65,12 +89,22 @@ class _PetriDishState<PetriDish> extends State {
     final List<Bacteria> newList = <Bacteria>[];
     newList.add(Bacteria.createRandomFromBounds(size.width, size.height));
 
+    _updateBacteriaList(newList);
+  }
+
+  void _updateBacteriaList(List<Bacteria> newList) {
     setState(() {
       bacteriaList = newList;
+      bacteriaGrowthHistory.add(
+        BacteriaGrowthHistoryElement(
+          tickNumber: currentTick,
+          amountOfBacteria: newList.length,
+        ),
+      );
     });
   }
 
-  void _createNewRandomBacteria() {
+  void _iterateAllBacteria() {
     final List<Bacteria> newList = <Bacteria>[];
 
     for (final Bacteria bacteria in bacteriaList) {
@@ -79,20 +113,22 @@ class _PetriDishState<PetriDish> extends State {
         bacteria,
       );
 
-      newList.add(newBacteria);
-
       final bool shouldCreateNew =
-          Random().nextDouble() > recreationProbability;
+          Random().nextDouble() > 1 - recreationProbability;
 
       if (shouldCreateNew && bacteriaList.length < maxBacteriaAmount) {
         newList.add(
           Bacteria.createRandomFromExistingBacteria(size, bacteria),
         );
       }
+
+      final bool shouldKill = Random().nextDouble() > 1 - deathProbability;
+
+      if (!shouldKill) {
+        newList.add(newBacteria);
+      }
     }
 
-    setState(() {
-      bacteriaList = newList;
-    });
+    _updateBacteriaList(newList);
   }
 }
