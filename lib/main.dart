@@ -1,4 +1,4 @@
-import 'package:bacterial_growth/bacterial_growth.dart';
+import 'package:bacterial_growth/petri_dish.dart';
 import 'package:flutter/material.dart';
 
 void main() {
