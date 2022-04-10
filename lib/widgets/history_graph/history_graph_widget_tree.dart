@@ -1,59 +1,34 @@
 import 'dart:math';
 
+import 'package:bacterial_growth/widgets/history_graph/bacteria_history_graph.dart';
 import 'package:flutter/material.dart';
 
-class BacteriaHistoryGraph extends StatelessWidget {
-  const BacteriaHistoryGraph({
+class HistoryGraphWidgetTree extends StatelessWidget {
+  const HistoryGraphWidgetTree({
     required this.historyElements,
     required this.currentTick,
     required this.currentBacteriaAmount,
+    required this.size,
   });
 
-  static const double padding = 32;
-  static const double opacity = 0.5;
   static const int elementDrawLimit = 2000;
+  static const double padding = 32;
 
   final List<BacteriaGrowthHistoryElement> historyElements;
   final int currentTick;
   final int currentBacteriaAmount;
+  final Size size;
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        final double dotSize = constraints.maxWidth / 120;
-        final double width =
-            constraints.maxWidth - (padding * 2) - (dotSize * 2);
-        final double height =
-            constraints.maxHeight - (padding * 2) - (dotSize * 2);
-
-        return Opacity(
-          opacity: opacity,
-          child: Container(
-            padding: const EdgeInsets.all(
-              padding,
-            ),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: <BoxShadow>[
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 12,
-                )
-              ],
-            ),
-            child: _buildStack(dotSize, width, height),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildStack(double dotSize, double width, double height) {
     if (historyElements.isEmpty || currentBacteriaAmount == 0) {
       return Container();
     }
+
+    final double dotSize = size.height / 120;
+    final double width = size.width - (padding * 2) - (dotSize * 2);
+    final double height = size.height - (padding * 2) - (dotSize * 2);
+
     final List<BacteriaGrowthHistoryElement> limitedElements =
         historyElements.sublist(
       max(0, historyElements.length - elementDrawLimit),
@@ -90,14 +65,4 @@ class BacteriaHistoryGraph extends StatelessWidget {
       ),
     );
   }
-}
-
-class BacteriaGrowthHistoryElement {
-  BacteriaGrowthHistoryElement({
-    required this.tickNumber,
-    required this.amountOfBacteria,
-  });
-
-  final int tickNumber;
-  final int amountOfBacteria;
 }

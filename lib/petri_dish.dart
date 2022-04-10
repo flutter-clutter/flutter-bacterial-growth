@@ -1,11 +1,9 @@
 import 'dart:math';
 
-import 'package:bacterial_growth/bacteria_collection.dart';
-import 'package:bacterial_growth/bacteria_history_graph.dart';
 import 'package:bacterial_growth/model/bacteria.dart';
+import 'package:bacterial_growth/widgets/bacteria_collection/bacteria_collection_canvas.dart';
+import 'package:bacterial_growth/widgets/history_graph/bacteria_history_graph.dart';
 import 'package:flutter/material.dart';
-
-// TODO: Add graph symbolizing the growth
 
 class PetriDish extends StatefulWidget {
   const PetriDish({Key? key}) : super(key: key);
@@ -20,7 +18,7 @@ class _PetriDishState<PetriDish> extends State {
   static const int tickTime = 30;
   static const double recreationProbability = 0.005;
   static const double deathProbability = 0.001;
-  static const double maxBacteriaAmount = 1024;
+  static const double maxBacteriaAmount = 10000;
 
   int currentTick = 0;
   List<Bacteria> bacteriaList = <Bacteria>[];
@@ -38,10 +36,14 @@ class _PetriDishState<PetriDish> extends State {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        size = Size(constraints.maxWidth, constraints.maxHeight);
+        size = constraints.biggest;
         return Stack(
           children: <Widget>[
-            BacteriaCollection(bacteriaList: bacteriaList),
+            SizedBox(
+              width: size.width,
+              height: size.height,
+              child: BacteriaCollectionCanvas(bacteriaList: bacteriaList),
+            ),
             Positioned(
               bottom: 0,
               child: SizedBox(

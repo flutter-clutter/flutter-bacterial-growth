@@ -1,9 +1,9 @@
-import 'package:bacterial_growth/bacterial_painter.dart';
 import 'package:bacterial_growth/model/bacteria.dart';
+import 'package:bacterial_growth/widgets/bacteria_collection/bacterial_painter.dart';
 import 'package:flutter/material.dart';
 
-class BacteriaCollection extends StatelessWidget {
-  const BacteriaCollection({required this.bacteriaList});
+class BacteriaCollectionWidgetTree extends StatelessWidget {
+  const BacteriaCollectionWidgetTree({required this.bacteriaList});
 
   final List<Bacteria> bacteriaList;
 
