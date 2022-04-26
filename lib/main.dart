@@ -1,5 +1,6 @@
 import 'package:bacterial_growth/petri_dish.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(const BacterialGrowthApp());
@@ -10,6 +11,10 @@ class BacterialGrowthApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+    );
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       color: Colors.white,

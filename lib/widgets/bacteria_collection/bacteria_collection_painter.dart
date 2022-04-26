@@ -12,8 +12,8 @@ class BacteriaCollectionPainter extends CustomPainter {
     for (final Bacteria bacteria in bacteriaList) {
       final Rect rect = Rect.fromLTWH(
         bacteria.x,
-        size.height - bacteria.y,
-        bacteria.width / 2,
+        bacteria.y,
+        bacteria.width,
         bacteria.height,
       );
       final RRect roundedRectangle = RRect.fromRectAndRadius(
@@ -21,14 +21,13 @@ class BacteriaCollectionPainter extends CustomPainter {
         Radius.circular(bacteria.width / 2),
       );
       paint.strokeWidth = 2;
-      //paint.style = PaintingStyle.stroke;
       paint.color = Colors.black38;
 
       _drawRotated(
         canvas,
         Offset(
           bacteria.x + (bacteria.width / 2),
-          size.height - (bacteria.y - (bacteria.height / 2)),
+          bacteria.y + (bacteria.height / 2),
         ),
         bacteria.rotation,
         () => canvas.drawRRect(roundedRectangle, paint),

@@ -48,6 +48,6 @@ class Bacteria {
   double x;
   double y;
   double rotation;
-  final double height = 16;
-  final double width = 12;
+  final double height = 18;
+  final double width = 6;
 }

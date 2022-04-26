@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:bacterial_growth/widgets/history_graph/bacteria_history_graph.dart';
+import 'package:bacterial_growth/widgets/history_graph/bacteria_growth_history_element.dart';
 import 'package:flutter/material.dart';
 
 class HistoryGraphWidgetTree extends StatelessWidget {

@@ -1,3 +1,4 @@
+import 'package:bacterial_growth/widgets/history_graph/bacteria_growth_history_element.dart';
 import 'package:bacterial_growth/widgets/history_graph/history_graph_canvas.dart';
 import 'package:flutter/material.dart';
 
@@ -71,14 +72,4 @@ class BacteriaHistoryGraph extends StatelessWidget {
       ),
     );
   }
-}
-
-class BacteriaGrowthHistoryElement {
-  BacteriaGrowthHistoryElement({
-    required this.tickNumber,
-    required this.amountOfBacteria,
-  });
-
-  final int tickNumber;
-  final int amountOfBacteria;
 }
